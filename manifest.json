@@ -1,0 +1,18 @@
+{
+    "manifest_version" : 3,
+    "name" : "TwitchPinChannels",
+    "version" : "1.0.1",
+    "description" : "Adds buttons at each channel of main page, which allows pin favorite channels at the top of the list",
+    "icons" : {},
+    "content_scripts" :[ 
+    {
+        "matches" : ["https://www.twitch.tv/*"],
+        "run_at" : "document_idle",
+        "all_frames" : false,
+        "js" : ["./content.js"],
+        "css" : ["content.css"]
+    }
+    ],
+    "permissions": ["tabs"],
+    "host_permissions":["https://www.twitch.tv/*"]   
+}
