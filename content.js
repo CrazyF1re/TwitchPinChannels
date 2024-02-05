@@ -15,7 +15,7 @@ function btnPressed(btn)
     if(btn.getAttribute('condition') == "false"){
         btn.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
         btn.setAttribute('condition','true')
-        parent = btn.parentElement.cloneNode(true)
+        parent = btn.parentElement.parentElement.cloneNode(true)
         btn.parentElement.remove()
         document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]').prepend(parent)
     }
@@ -51,6 +51,7 @@ function setPins() {
     }
     catch (e){
     }
+    
     // logic of buttons
     document.querySelectorAll('button[class^="pin"]').forEach((element)=> {
         element.onclick = function(){
