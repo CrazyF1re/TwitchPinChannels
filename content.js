@@ -23,12 +23,14 @@ function setPinnedChannels(){
             let tmp =document.querySelector(`p[title="${elem.name}"]`).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.cloneNode(true)
             document.querySelector(`p[title="${elem.name}"]`).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "none";
             tmp.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
+            tmp.querySelector('button').setAttribute('condition','true')
             listchannels.prepend(tmp)
 
         }
         else{
             let tmp = new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]')
             tmp.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
+            tmp.querySelector('button').setAttribute('condition','true')
             listchannels.prepend(tmp)
         }
     })
