@@ -1,6 +1,6 @@
 let count = 0
 const DELAY = 500
-
+let flag = true
 // function creates pin button and returns it
 function createPin(){
     let btn = document.createElement('button')
@@ -13,7 +13,25 @@ function createPin(){
 
 // get pinned channels from storage and place it into top of list of channels
 function setPinnedChannels(){
-    
+    let lst = JSON.parse(localStorage.getItem('PinnedList'))
+    let listchannels = document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]')
+    console.log()
+    lst.forEach(elem => {
+        if(document.querySelector(`p[title="${elem.name}"]`))
+        {
+            
+            let tmp =document.querySelector(`p[title="${elem.name}"]`).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.cloneNode(true)
+            document.querySelector(`p[title="${elem.name}"]`).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "none";
+            tmp.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
+            listchannels.prepend(tmp)
+
+        }
+        else{
+            let tmp = new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]')
+            tmp.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
+            listchannels.prepend(tmp)
+        }
+    })
 }
 
 // add pinned channel into storage
@@ -29,6 +47,7 @@ function addToStorage(element){
         element.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').remove()
         element.querySelector('span[class="CoreText-sc-1txzju1-0 gWcDEo"]').remove()
         element.querySelector('div[class="Layout-sc-1xcs6mc-0 xxjeD"]').remove()
+        element.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
         element.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').prepend(offline)
     }
     // save element into stotage
@@ -87,6 +106,7 @@ function btnPressed(btn)
 //adds pin buttons at web page
 function setPins() {
     try{
+        
         if (document.querySelector('div[class="Layout-sc-1xcs6mc-0 dcyYPL side-nav-section"]').querySelectorAll('a[class~="ivecvv"]').length!= document.querySelectorAll('button[class^="pin"]').length) {
             document.querySelector('div[class="Layout-sc-1xcs6mc-0 dcyYPL side-nav-section"]').querySelectorAll('div[class="Layout-sc-1xcs6mc-0 cwtKyw side-nav-card"]').forEach((element) => {
                 if (!element.querySelector('button[class^="pin"]')){
@@ -106,8 +126,17 @@ function setPins() {
                         }
                     })   
                 }
+                JSON.parse(localStorage.getItem('PinnedList')).forEach(elem =>{
+                    if(document.querySelectorAll(`p[title="${elem.name}"]`).length>1){
+                        document.querySelectorAll(`p[title="${elem.name}"]`)[1].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "none"
+                    }
+                })
             },200)
-        }    
+        }  
+        if (flag){
+            setPinnedChannels()
+            flag = false
+        }  
     }
     catch (e){
     }
@@ -121,6 +150,5 @@ function setPins() {
 
 // main loop
 if (document.readyState !== 'loading'){
-    setPinnedChannels()
     setInterval(setPins, DELAY);   
 }
