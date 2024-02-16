@@ -1,6 +1,7 @@
 let count = 0
 const DELAY = 500
 let flag = true
+let updater = 10
 // function creates pin button and returns it
 function createPin(){
     let btn = document.createElement('button')
@@ -105,6 +106,34 @@ function btnPressed(btn)
     }
 }
 
+function update_channels_info(){
+    let lst = JSON.parse(localStorage.getItem('PinnedList'))
+    lst.forEach(elem => {
+        let chnls = document.querySelectorAll(`p[title="${elem.name}"]`)
+        if(chnls.length == 2)
+        {
+            let parent0 = chnls[0].parentElement.parentElement.parentElement.parentElement
+            let parent1 = chnls[1].parentElement.parentElement.parentElement.parentElement
+            // live counter
+            parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML}`
+            // category
+            if (parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]')){
+                parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML}`
+            }
+            else{
+                parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 eza-dez"]').append(parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML)    
+            }
+        }
+        if(chnls.length == 1 && chnls[0].parentElement.parentElement.parentElement.parentElement.querySelector('div[class="ScChannelStatusIndicator-sc-bjn067-0 kqWDUJ tw-channel-status-indicator"]')){
+
+            chnls[0].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]').innerHTML}`
+            // chnls[0].querySelector('button[class^="pin"]').querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
+        }
+        
+        
+    })
+}
+
 //adds pin buttons at web page
 function setPins() {
     try{
@@ -142,6 +171,11 @@ function setPins() {
     }
     catch (e){
     }
+    if (!flag && updater == 0) {
+        updater = 10
+        update_channels_info()
+    }
+    updater-=1
     // logic of buttons
     document.querySelectorAll('button[class^="pin"]').forEach((element)=> {
         element.onclick = function(){
