@@ -121,8 +121,9 @@ function update_channels_info(){
                 parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML}`
             }
             else{
-                parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 eza-dez"]').append(parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML)    
+                parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 eza-dez"]').append(`${new DOMParser().parseFromString(parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]').innerHTML}`)
             }
+            parent1.parentElement.parentElement.parentElement.style.display = 'none'
         }
         if(chnls.length == 1 && chnls[0].parentElement.parentElement.parentElement.parentElement.querySelector('div[class="ScChannelStatusIndicator-sc-bjn067-0 kqWDUJ tw-channel-status-indicator"]')){
 
