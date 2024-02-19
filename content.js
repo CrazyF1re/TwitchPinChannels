@@ -114,11 +114,14 @@ function update_channels_info(){
         {
             let parent0 = chnls[0].parentElement.parentElement.parentElement.parentElement
             let parent1 = chnls[1].parentElement.parentElement.parentElement.parentElement
+            //img offline to online effect 
+            parent0.querySelector('div[class^="Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar"]').className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar"
             // live counter
             parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML}`
             // category
             if (parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]')){
                 parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML}`
+                
             }
             else{
                 parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 eza-dez"]').append(`${new DOMParser().parseFromString(parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]').innerHTML}`)
