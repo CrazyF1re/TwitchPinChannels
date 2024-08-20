@@ -116,7 +116,7 @@ function update_channels_info(){
             let parent1 = chnls[1].parentElement.parentElement.parentElement.parentElement
             //img offline to online effect 
             try{
-                parent0.querySelector('div[class^="Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar"]').className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar"
+                parent0.querySelector('div[class^="Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar"]').className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar"
             }
             catch (e){
             }
