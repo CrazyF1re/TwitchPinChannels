@@ -5,7 +5,7 @@ let updater = 10
 // function creates pin button and returns it
 function createPin(){
     let btn = document.createElement('button')
-    btn.className = 'pin-'+count
+    btn.className = 'pin'
     count+=1
     btn.setAttribute("condition", "false")
     btn.innerHTML = '<img src="https://i.imgur.com/suOLe1J.png" style="width: 18px; height: 18px;">'
@@ -70,10 +70,6 @@ function addToStorage(element){
 function delFromStorage(elem){
     let nick = elem.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent
     let lst = JSON.parse(localStorage.getItem('PinnedList'))
-    let number
-    lst.forEach(el => {if(el.name == nick){
-        number = lst.indexOf(el)
-    }})
     lst = lst.filter(n => n.name != nick)
     localStorage.setItem('PinnedList',JSON.stringify(lst))
 }
@@ -93,9 +89,9 @@ function btnPressed(btn)
     }
     else{
 
-        delFromStorage(btn.parentElement.parentElement.parentElement)
+        delFromStorage(btn.parentElement.parentElement)
         let nick = btn.parentElement.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent
-        btn.parentElement.parentElement.parentElement.remove()
+        btn.parentElement.parentElement.remove()
         let flag = true
         document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]').querySelectorAll('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').forEach(elem => {
             if (elem.textContent === nick && flag){
