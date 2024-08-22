@@ -139,7 +139,7 @@ function update_channels_info(){
             parent1.parentElement.parentElement.parentElement.style.display = 'none'
         }
         // if we have the one channel and it has red live point then switch channel to offline type from localStorage
-        if(chnls.length == 1 && chnls[0].parentElement.parentElement.parentElement.parentElement.querySelector('div[class="ScChannelStatusIndicator-sc-bjn067-0 kqWDUJ tw-channel-status-indicator"]')){
+        if(chnls.length == 1 && chnls[0].parentElement.parentElement.parentElement.parentElement.querySelector('div[class$="tw-channel-status-indicator"]')){
 
             chnls[0].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]').innerHTML}`
         }
