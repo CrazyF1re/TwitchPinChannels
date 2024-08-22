@@ -147,11 +147,11 @@ function update_channels_info(){
         
     })
 }
-function openChannels(){
+//open and close list of channels (in case when pinned channel hidden and extention cant get info about this channel)
+function openCloseChannels(){
     document.querySelector("button[data-test-selector='ShowMore']").click()
-}
-function closeChannels(){
-    document.querySelector("button[data-test-selector='ShowLess']").click()
+    setTimeout(function(){document.querySelector("button[data-test-selector='ShowLess']").click();console.log("close channels ")},50)
+    
 }
 
 //adds pin buttons at web page
@@ -208,7 +208,6 @@ function setPins() {
 
 // main loop
 if (document.readyState !== 'loading'){
-    setInterval(openChannels,DELAY*120)
+    setInterval(openCloseChannels,DELAY*120)
     setInterval(setPins, DELAY);   
-    setInterval(closeChannels,DELAY*120)
 }
