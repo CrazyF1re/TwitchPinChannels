@@ -184,6 +184,7 @@ function setPins() {
                         document.querySelectorAll(`p[title="${elem.name}"]`)[1].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "none"
                     }
                 })
+                update_channels_info()
             },200)
         }  
         if (flag){
