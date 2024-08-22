@@ -147,6 +147,12 @@ function update_channels_info(){
         
     })
 }
+function openChannels(){
+    document.querySelector("button[data-test-selector='ShowMore']").click()
+}
+function closeChannels(){
+    document.querySelector("button[data-test-selector='ShowLess']").click()
+}
 
 //adds pin buttons at web page
 function setPins() {
@@ -202,5 +208,7 @@ function setPins() {
 
 // main loop
 if (document.readyState !== 'loading'){
+    setInterval(openChannels,DELAY*120)
     setInterval(setPins, DELAY);   
+    setInterval(closeChannels,DELAY*120)
 }
