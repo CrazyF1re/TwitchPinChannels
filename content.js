@@ -131,7 +131,10 @@ function update_channels_info(){
                 parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 eza-dez"]').append(parent1.querySelector("div[class='Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata']").cloneNode(true))
             }
             //change image online
-            parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar--offline"]').className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar"
+            if (parent0.previousSibling.className == "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar--offline"){
+                parent0.previousSibling.className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar"
+            }
+            
 
             parent1.parentElement.parentElement.parentElement.style.display = 'none'
         }
