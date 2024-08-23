@@ -39,24 +39,25 @@ function setPinnedChannels(){
 
 // add pinned channel into storage
 function addToStorage(element){
-    const offline = document.createElement('div')
-    offline.className = 'Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status'
-    offline.setAttribute('data-a-target',"side-nav-live-status")
-    offline.innerHTML = '<span class="CoreText-sc-1txzju1-0 gWcDEo">Не в сети</span>'
-
+    const offline = element.cloneNode(true)
     //if channel is online, then delete category of stream and replace online counter with offline status 
-    if(element.querySelector('div[class="ScChannelStatusIndicator-sc-bjn067-0 kqWDUJ tw-channel-status-indicator"]')){
-        element = element.cloneNode(true)
-        element.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').remove()
-        element.querySelector('span[class="CoreText-sc-1txzju1-0 gWcDEo"]').remove()
-        element.querySelector('div[class="Layout-sc-1xcs6mc-0 xxjeD"]').remove()
-        element.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
-        element.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').prepend(offline)
+    if(element.querySelector('div[class$="tw-channel-status-indicator"]')){
+        //switch to offline
+        offline.querySelector("span[class='CoreText-sc-1txzju1-0 gWcDEo']").textContent = "Не в сети"
+        //remove online indicator
+        offline.querySelector("div[class='ScChannelStatusIndicator-sc-bjn067-0 eeoSbx tw-channel-status-indicator']").remove()
+        //remove category
+        offline.querySelector("p[class='CoreText-sc-1txzju1-0 eUABfN']").innerHTML = ""
+        //change image of pin to colorfull
+        offline.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
+        //change image to offline
+        offline.querySelector("div[class$='side-nav-card__live-status'").className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar--offline"
     }
+
     // save element into stotage
     let obj = {
-        name: element.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent,
-        block:element.outerHTML
+        name: offline.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent,
+        block:offline.outerHTML
     }
     let lst = []
     if(localStorage.getItem('PinnedList')){
@@ -127,7 +128,7 @@ function update_channels_info(){
                 parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 eza-dez"]').append(parent1.querySelector("div[class='Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata']").cloneNode(true))
             }
             //change image online
-            if (parent0.previousSibling.className == "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar--offline"){
+            if (parent1.previousSibling.querySelector("div[class$='side-nav-card__live-status']")){
                 parent0.previousSibling.className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar"
             }
             
