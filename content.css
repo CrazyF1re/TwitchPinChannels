@@ -1,6 +1,13 @@
 
-button[class^="pin"]{
-    display: flex !important;
-    float: inline-start;
-    margin: 15px 0 9px 5px;
+button[class="pin"]{
+    display:flex;
+    float:inline-start;
+    position: relative !important;
+    padding-top: 10px;
+    padding-bottom: 6px;
+    margin-left: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    display: block;
+    align-items: center;
 }

@@ -159,6 +159,7 @@ function setPins() {
         if ( channels_counter != pins_counter) {
             document.querySelector('div[class="Layout-sc-1xcs6mc-0 dcyYPL side-nav-section"]').querySelectorAll('div[class^="Layout-sc-1xcs6mc-0 cwtKyw side-nav-card"]').forEach((element) => {
                 if (!element.querySelector('button[class^="pin"]')){
+                    element.style = " display:inline-flex; width:100%"
                     element.querySelector('a[class^="ScCoreLink-sc-16kq0mq-0 eBmhqT InjectLayout-sc-1i43xsx-0 ivecvv side-nav-card__link"]').style.cssText = "width: 90% !important;float: right;"
                     btn = createPin()
                     element.prepend(btn)
