@@ -113,16 +113,16 @@ function update_channels_info(){
             let parent1 = chnls[1].parentElement.parentElement.parentElement.parentElement
             //img offline to online effect 
             try{
-                parent0.querySelector('div[class^="Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar"]').className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar"
+                parent0.previousSibling.className = parent1.previousSibling.className
             }
             catch (e){
+                console.log("image does not change")
             }
             // live counter
             parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML}`
             // category
             if (parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]')){
                 parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML}`
-                
             }
             else{
                 parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 eza-dez"]').append(parent1.querySelector("div[class='Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata']").cloneNode(true))
