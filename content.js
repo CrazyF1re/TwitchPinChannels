@@ -16,7 +16,6 @@ function createPin(){
 function setPinnedChannels(){
     let lst = JSON.parse(localStorage.getItem('PinnedList'))
     let listchannels = document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]')
-    console.log()
     lst.forEach(elem => {
         if(document.querySelector(`p[title="${elem.name}"]`))
         {
@@ -51,7 +50,7 @@ function addToStorage(element){
         //change image of pin to colorfull
         offline.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
         //change image to offline
-        offline.querySelector("div[class$='side-nav-card__live-status'").className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar--offline"
+        offline.querySelector("div[class$='Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar'").className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar--offline"
     }
 
     // save element into stotage
@@ -116,7 +115,6 @@ function update_channels_info(){
                 parent0.previousSibling.className = parent1.previousSibling.className
             }
             catch (e){
-                console.log("image does not change")
             }
             // live counter
             parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML}`
@@ -138,7 +136,8 @@ function update_channels_info(){
         // if we have the one channel and it has red live point then switch channel to offline type from localStorage
         if(chnls.length == 1 && chnls[0].parentElement.parentElement.parentElement.parentElement.querySelector('div[class$="tw-channel-status-indicator"]')){
 
-            chnls[0].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]').innerHTML}`
+            
+            chnls[0].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]').innerHTML}`
         }
         
         
@@ -147,7 +146,7 @@ function update_channels_info(){
 //open and close list of channels (in case when pinned channel hidden and extention cant get info about this channel)
 function openCloseChannels(){
     document.querySelector("button[data-test-selector='ShowMore']").click()
-    setTimeout(function(){document.querySelector("button[data-test-selector='ShowLess']").click();console.log("close channels ")},50)
+    setTimeout(function(){document.querySelector("button[data-test-selector='ShowLess']").click()},50)
     
 }
 
