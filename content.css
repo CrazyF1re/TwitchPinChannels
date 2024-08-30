@@ -11,3 +11,7 @@ button[class="pin"]{
     display: block;
     align-items: center;
 }
+.red-container{
+    border:1px solid darkseagreen;
+    border-radius: 10px;
+}

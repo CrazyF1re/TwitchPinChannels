@@ -2,6 +2,8 @@ let count = 0
 const DELAY = 500
 let flag = true
 let updater = 10
+let redContainer = document.createElement('div')
+redContainer.className= 'red-container'
 // function creates pin button and returns it
 function createPin(){
     let btn = document.createElement('button')
@@ -11,21 +13,20 @@ function createPin(){
     btn.innerHTML = '<img src="https://i.imgur.com/suOLe1J.png" style="width: 18px; height: 18px;">'
     return btn
 }
-
 // get pinned channels from storage and place it into top of list of channels
 function setPinnedChannels(){
     let lst = JSON.parse(localStorage.getItem('PinnedList'))
     let listchannels = document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]')
+    listchannels.prepend(redContainer)
+    listchannels = listchannels.firstChild
     lst.forEach(elem => {
         if(document.querySelector(`p[title="${elem.name}"]`))
         {
-            
             let tmp =document.querySelector(`p[title="${elem.name}"]`).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.cloneNode(true)
             document.querySelector(`p[title="${elem.name}"]`).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "none";
             tmp.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
             tmp.querySelector('button').setAttribute('condition','true')
             listchannels.prepend(tmp)
-
         }
         else{
             let tmp = new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]')
@@ -35,7 +36,6 @@ function setPinnedChannels(){
         }
     })
 }
-
 // add pinned channel into storage
 function addToStorage(element){
     const offline = element.cloneNode(true)
@@ -52,7 +52,6 @@ function addToStorage(element){
         //change image to offline
         offline.querySelector("div[class$='Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar'").className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar--offline"
     }
-
     // save element into stotage
     let obj = {
         name: offline.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent,
@@ -65,7 +64,6 @@ function addToStorage(element){
     lst.push(obj)
     localStorage.setItem('PinnedList',JSON.stringify(lst))
 }
-
 // delete unpinned channel from strorage
 function delFromStorage(elem){
     let nick = elem.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent
@@ -85,10 +83,9 @@ function btnPressed(btn)
         parent.querySelector('button').setAttribute('condition','true')
         parent.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
         btn.parentElement.parentElement.parentElement.style.display = "none"
-        document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]').prepend(parent)
+        document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]').firstChild.prepend(parent)
     }
     else{
-
         delFromStorage(btn.parentElement.parentElement)
         let nick = btn.parentElement.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent
         btn.parentElement.parentElement.remove()
@@ -130,26 +127,19 @@ function update_channels_info(){
                 parent0.previousSibling.className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar"
             }
             
-
             parent1.parentElement.parentElement.parentElement.style.display = 'none'
         }
         // if we have the one channel and it has red live point then switch channel to offline type from localStorage
         if(chnls.length == 1 && chnls[0].parentElement.parentElement.parentElement.parentElement.querySelector('div[class$="tw-channel-status-indicator"]')){
-
-            
-            chnls[0].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]').innerHTML}`
-        }
-        
-        
+            chnls[0].parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]').innerHTML}`
+        }        
     })
 }
 //open and close list of channels (in case when pinned channel hidden and extention cant get info about this channel)
 function openCloseChannels(){
     document.querySelector("button[data-test-selector='ShowMore']").click()
     setTimeout(function(){document.querySelector("button[data-test-selector='ShowLess']").click()},50)
-    
 }
-
 //adds pin buttons at web page
 function setPins() {
     try{
@@ -163,7 +153,6 @@ function setPins() {
                     btn = createPin()
                     element.prepend(btn)
                 }
-                
             })   
         }
         document.querySelector('span[class="CoreText-sc-1txzju1-0 hQHFHT"]').onclick = function(){
@@ -203,7 +192,6 @@ function setPins() {
         }
     })
 }
-
 // main loop
 if (document.readyState !== 'loading'){
     setInterval(openCloseChannels,DELAY*120)
