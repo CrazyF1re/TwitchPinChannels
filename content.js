@@ -1,14 +1,15 @@
 let count = 0
-const DELAY = 500
+const DELAY = 300
 let flag = true
 let updater = 10
-let redContainer = document.createElement('div')
-redContainer.className= 'red-container'
+let container = document.createElement('div')
+container.className= 'my-container'
 // function creates pin button and returns it
 function createPin(){
     let btn = document.createElement('button')
     btn.className = 'pin'
     count+=1
+    btn.setAttribute("type","button")
     btn.setAttribute("condition", "false")
     btn.innerHTML = '<img src="https://i.imgur.com/suOLe1J.png" style="width: 18px; height: 18px;">'
     return btn
@@ -17,28 +18,27 @@ function createPin(){
 function setPinnedChannels(){
     let lst = JSON.parse(localStorage.getItem('PinnedList'))
     let listchannels = document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]')
-    listchannels.prepend(redContainer)
+    listchannels.prepend(container)
     listchannels = listchannels.firstChild
     lst.forEach(elem => {
-        if(document.querySelector(`p[title="${elem.name}"]`))
+        //if channel is online then just pin the copy of channel and hide original channel string
+        title = document.querySelector(`p[title="${elem.name}"]`)
+        if(title && title.parentElement.parentElement.parentElement.querySelector("div[class='ScChannelStatusIndicator-sc-bjn067-0 eeoSbx tw-channel-status-indicator']"))
         {
-            let tmp =document.querySelector(`p[title="${elem.name}"]`).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.cloneNode(true)
-            document.querySelector(`p[title="${elem.name}"]`).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "none";
-            tmp.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
-            tmp.querySelector('button').setAttribute('condition','true')
-            listchannels.prepend(tmp)
+            channel = document.querySelector(`p[title="${elem.name}"]`).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+            var tmp =channel.cloneNode(true)
+            channel.style.display = "none";
+            tmp.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"     
         }
-        else{
-            let tmp = new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]')
-            tmp.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
-            tmp.querySelector('button').setAttribute('condition','true')
-            listchannels.prepend(tmp)
+        else{//get channel from list of channels
+            var tmp = new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]') 
         }
+        listchannels.prepend(tmp)
     })
 }
 // add pinned channel into storage
 function addToStorage(element){
-    const offline = element.cloneNode(true)
+    let offline = element.cloneNode(true)
     //if channel is online, then delete category of stream and replace online counter with offline status 
     if(element.querySelector('div[class$="tw-channel-status-indicator"]')){
         //switch to offline
@@ -47,11 +47,14 @@ function addToStorage(element){
         offline.querySelector("div[class='ScChannelStatusIndicator-sc-bjn067-0 eeoSbx tw-channel-status-indicator']").remove()
         //remove category
         offline.querySelector("p[class='CoreText-sc-1txzju1-0 eUABfN']").innerHTML = ""
-        //change image of pin to colorfull
-        offline.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
         //change image to offline
         offline.querySelector("div[class$='Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar'").className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar--offline"
     }
+    //change image of pin to colorfull
+    offline.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
+    //set condition to button
+    offline.querySelector('button').setAttribute('condition','true')
+    
     // save element into stotage
     let obj = {
         name: offline.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent,
@@ -71,7 +74,6 @@ function delFromStorage(elem){
     lst = lst.filter(n => n.name != nick)
     localStorage.setItem('PinnedList',JSON.stringify(lst))
 }
-
 // when pin button pressed
 function btnPressed(btn)
 {
@@ -89,16 +91,13 @@ function btnPressed(btn)
         delFromStorage(btn.parentElement.parentElement)
         let nick = btn.parentElement.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent
         btn.parentElement.parentElement.remove()
-        let flag = true
         document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]').querySelectorAll('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').forEach(elem => {
-            if (elem.textContent === nick && flag){
-                flag = false
-                elem.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "block"
+            if (elem.textContent === nick){//make channel visible which is not pinned
+                elem.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.style.display = "block"
             }
         });
     }
 }
-
 function update_channels_info(){
     let lst = JSON.parse(localStorage.getItem('PinnedList'))
     lst.forEach(elem => {
@@ -111,13 +110,13 @@ function update_channels_info(){
             try{
                 parent0.previousSibling.className = parent1.previousSibling.className
             }
-            catch (e){
-            }
+            catch (e){}
             // live counter
             parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML}`
             // category
-            if (parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]')){
-                parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML}`
+            category = parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]')
+            if (category){
+                category.innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML}`
             }
             else{
                 parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 eza-dez"]').append(parent1.querySelector("div[class='Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata']").cloneNode(true))
@@ -126,7 +125,6 @@ function update_channels_info(){
             if (parent1.previousSibling.querySelector("div[class$='side-nav-card__live-status']")){
                 parent0.previousSibling.className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar"
             }
-            
             parent1.parentElement.parentElement.parentElement.style.display = 'none'
         }
         // if we have the one channel and it has red live point then switch channel to offline type from localStorage
@@ -144,10 +142,10 @@ function openCloseChannels(){
 function setPins() {
     try{
         channels_counter = document.querySelector('div[class="Layout-sc-1xcs6mc-0 dcyYPL side-nav-section"]').querySelectorAll('a[class~="ivecvv"]').length
-        pins_counter = document.querySelectorAll('button[class^="pin"]').length
+        pins_counter = document.querySelectorAll('button[class="pin"]').length
         if ( channels_counter != pins_counter) {
             document.querySelector('div[class="Layout-sc-1xcs6mc-0 dcyYPL side-nav-section"]').querySelectorAll('div[class^="Layout-sc-1xcs6mc-0 cwtKyw side-nav-card"]').forEach((element) => {
-                if (!element.querySelector('button[class^="pin"]')){
+                if (!element.querySelector('button[class="pin"]')){
                     element.style = " display:inline-flex; width:100%"
                     element.querySelector('a[class^="ScCoreLink-sc-16kq0mq-0 eBmhqT InjectLayout-sc-1i43xsx-0 ivecvv side-nav-card__link"]').style.cssText = "width: 90% !important;float: right;"
                     btn = createPin()
@@ -159,7 +157,7 @@ function setPins() {
             setTimeout(()=>{
                 if (document.querySelector('div[class="Layout-sc-1xcs6mc-0 dcyYPL side-nav-section"]').querySelectorAll('a[class~="ivecvv"]').length!= document.querySelectorAll('button[class^="pin"]').length) {
                     document.querySelector('div[class="Layout-sc-1xcs6mc-0 dcyYPL side-nav-section"]').querySelectorAll('div[class="Layout-sc-1xcs6mc-0 cwtKyw side-nav-card"]').forEach((element) => {
-                        if (!element.querySelector('button[class^="pin"]')){
+                        if (!element.querySelector('button[class="pin"]')){
                             element.querySelector('a[class="ScCoreLink-sc-16kq0mq-0 eBmhqT InjectLayout-sc-1i43xsx-0 ivecvv side-nav-card__link tw-link"]').style.cssText = "width: 90% !important;float: right;"
                             element.prepend(btn)
                         }
@@ -178,15 +176,14 @@ function setPins() {
             flag = false
         }  
     }
-    catch (e){
-    }
+    catch (e){}
     if (!flag && updater == 0) {
         updater = 10
         update_channels_info()
     }
     updater-=1
     // logic of buttons
-    document.querySelectorAll('button[class^="pin"]').forEach((element)=> {
+    document.querySelectorAll('button[class="pin"]').forEach((element)=> {
         element.onclick = function(){
             btnPressed(element)
         }
