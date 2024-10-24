@@ -60,10 +60,7 @@ function addToStorage(element){
         name: offline.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent,
         block:offline.outerHTML
     }
-    let lst = []
-    if(localStorage.getItem('PinnedList')){
-        lst = JSON.parse(localStorage.getItem('PinnedList'))
-    }
+    let lst = localStorage.getItem('PinnedList') ? JSON.parse(localStorage.getItem('PinnedList')) : []
     lst.push(obj)
     localStorage.setItem('PinnedList',JSON.stringify(lst))
 }
