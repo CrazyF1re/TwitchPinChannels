@@ -23,7 +23,7 @@ function setPinnedChannels(){
     lst.forEach(elem => {
         //if channel is online then just pin the copy of channel and hide original channel string
         title = document.querySelector(`p[title="${elem.name}"]`)
-        if(title && title.parentElement.parentElement.parentElement.querySelector("div[class='ScChannelStatusIndicator-sc-bjn067-0 eeoSbx tw-channel-status-indicator']"))
+        if(title?.parentElement.parentElement.parentElement.querySelector("div[class='ScChannelStatusIndicator-sc-bjn067-0 eeoSbx tw-channel-status-indicator']"))
         {
             channel = document.querySelector(`p[title="${elem.name}"]`).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
             var tmp =channel.cloneNode(true)
