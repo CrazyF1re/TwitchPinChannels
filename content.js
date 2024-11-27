@@ -157,8 +157,6 @@ function setPins() {
                     element.querySelector('a[class^="ScCoreLink-sc-16kq0mq-0 iCWdoq InjectLayout-sc-1i43xsx-0"]').style.cssText = "width: 90% !important;float: right;"
                     btn = createPin()
                     element.prepend(btn)
-
-                    // ScCoreLink-sc-16kq0mq-0 iCWdoq InjectLayout-sc-1i43xsx-0
                 }
             })   
         }
