@@ -109,7 +109,7 @@ function update_channels_info(){
     let lst = JSON.parse(localStorage.getItem('PinnedList'))
     lst.forEach(elem => {
         let chnls = document.querySelectorAll(`p[title="${elem.name}"]`)
-        if(chnls.length == 2)
+        if(chnls.length > 1)
         {
             let parent0 = get_parent(chnls[0],4)
             let parent1 = get_parent(chnls[1],4)
