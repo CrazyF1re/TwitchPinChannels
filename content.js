@@ -31,7 +31,7 @@ function setPinnedChannels(){
     lst.forEach(elem => {
         //if channel is online then just pin the copy of channel and hide original channel string
         title = document.querySelector(`p[title="${elem.name}"]`)
-        if(title?.parentElement.parentElement.parentElement.querySelector("div[class='ScChannelStatusIndicator-sc-bjn067-0 eeoSbx tw-channel-status-indicator']"))
+        if(title?.parentElement.parentElement.parentElement.querySelector("div[class='ScChannelStatusIndicator-sc-bjn067-0 gwViFi tw-channel-status-indicator']"))
         {
             
             channel = get_parent(document.querySelector(`p[title="${elem.name}"]`),7)
@@ -54,7 +54,7 @@ function addToStorage(element){
         //switch to offline
         offline.querySelector("span[class='CoreText-sc-1txzju1-0 gWcDEo']").textContent = "Не в сети"
         //remove online indicator
-        offline.querySelector("div[class='ScChannelStatusIndicator-sc-bjn067-0 eeoSbx tw-channel-status-indicator']").remove()
+        offline.querySelector("div[class='ScChannelStatusIndicator-sc-bjn067-0 gwViFi tw-channel-status-indicator']").remove()
         //remove category
         offline.querySelector("p[class='CoreText-sc-1txzju1-0 eUABfN']").innerHTML = ""
         //change image to offline
