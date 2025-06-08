@@ -20,18 +20,16 @@ function get_parent(obj,count){
     }
     return obj
 }
-
-
 // get pinned channels from storage and place it into top of list of channels
 function setPinnedChannels(){
     let lst = JSON.parse(localStorage.getItem('PinnedList'))
-    let listchannels = document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]')
+    let listchannels = document.querySelector('div[class^="InjectLayout-sc-1i43xsx-0"][class*="tw-transition-group"]')
     listchannels.prepend(container)
     listchannels = listchannels.firstChild
     lst.forEach(elem => {
         //if channel is online then just pin the copy of channel and hide original channel string
         title = document.querySelector(`p[title="${elem.name}"]`)
-        if(title?.parentElement.parentElement.parentElement.querySelector("div[class='ScChannelStatusIndicator-sc-bjn067-0 gwViFi tw-channel-status-indicator']"))
+        if(title?.parentElement.parentElement.parentElement.querySelector('div[class$="tw-channel-status-indicator"]'))
         {
             
             channel = get_parent(document.querySelector(`p[title="${elem.name}"]`),7)
@@ -41,7 +39,7 @@ function setPinnedChannels(){
             tmp.querySelector('button').setAttribute('condition','true')
         }
         else{//get channel from list of channels
-            var tmp = new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]') 
+            var tmp = new DOMParser().parseFromString(elem.block, "text/html").querySelector('div') 
         }
         listchannels.prepend(tmp)
     })
@@ -51,14 +49,19 @@ function addToStorage(element){
     let offline = element.cloneNode(true)
     //if channel is online, then delete category of stream and replace online counter with offline status 
     if(element.querySelector('div[class$="tw-channel-status-indicator"]')){
+        //remove live counter div element
+        offline.querySelector('div[class$="tw-channel-status-indicator"]').parentElement.remove()
         //switch to offline
-        offline.querySelector("span[class='CoreText-sc-1txzju1-0 gWcDEo']").textContent = "Не в сети"
-        //remove online indicator
-        offline.querySelector("div[class='ScChannelStatusIndicator-sc-bjn067-0 gwViFi tw-channel-status-indicator']").remove()
+        not_live = document.createElement('p')
+        not_live.textContent = "Не в сети"
+        not_live.style = "    color: #dedee3;"
+        offline.querySelector('div[class$="side-nav-card__live-status"]').prepend(not_live)
         //remove category
-        offline.querySelector("p[class='CoreText-sc-1txzju1-0 eUABfN']").innerHTML = ""
+        offline.querySelector('div[class$="side-nav-card__metadata"]').firstChild.remove()
+        
+        
         //change image to offline
-        offline.querySelector("div[class$='Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar'").className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar side-nav-card__avatar--offline"
+        offline.querySelector('a').firstChild.className = offline.querySelector('a').firstChild.className + '--offline'
     }
     //change image of pin to colorfull
     offline.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
@@ -67,7 +70,7 @@ function addToStorage(element){
     
     // save element into stotage
     let obj = {
-        name: offline.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent,
+        name: offline.querySelector('p').title,
         block:offline.outerHTML
     }
     let lst = localStorage.getItem('PinnedList') ? JSON.parse(localStorage.getItem('PinnedList')) : []
@@ -76,7 +79,7 @@ function addToStorage(element){
 }
 // delete unpinned channel from strorage
 function delFromStorage(elem){
-    let nick = elem.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent
+    let nick = elem.querySelector('p').textContent
     let lst = JSON.parse(localStorage.getItem('PinnedList'))
     lst = lst.filter(n => n.name != nick)
     localStorage.setItem('PinnedList',JSON.stringify(lst))
@@ -87,20 +90,20 @@ function btnPressed(btn)
     // check condition (pinned or unpinned button and channel also)
     if(btn.getAttribute('condition') == "false"){
 
-        addToStorage(get_parent(btn,3))
-        parent = get_parent(btn,3).cloneNode(true)
+        addToStorage(get_parent(btn,2))
+        parent = get_parent(btn,2).cloneNode(true)
         parent.querySelector('button').setAttribute('condition','true')
         parent.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"
         get_parent(btn,3).style.display = "none"
-        document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]').firstChild.prepend(parent)
+        document.querySelector("div[class$='tw-transition-group']").firstChild.prepend(parent)
     }
     else{
         delFromStorage(get_parent(btn,2))
-        let nick = btn.parentElement.querySelector('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').textContent
+        let nick = btn.parentElement.querySelector('p').textContent
         get_parent(btn,2).remove()
-        document.querySelector('div[class="InjectLayout-sc-1i43xsx-0 hWukFy tw-transition-group"]').querySelectorAll('p[class="CoreText-sc-1txzju1-0 fdYGpZ HcPqQ InjectLayout-sc-1i43xsx-0"]').forEach(elem => {
+        document.querySelector('div[class$="tw-transition-group"]').querySelectorAll('p').forEach(elem => {
             if (elem.textContent === nick){//make channel visible which is not pinned
-                get_parent(elem,8).style.display = "block"
+                get_parent(elem,7).style.display = "block"
             }
         });
     }
@@ -119,24 +122,24 @@ function update_channels_info(){
             }
             catch (e){}
             // live counter
-            parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 fCKtYt side-nav-card__live-status"]').innerHTML}`
+            parent0.querySelector('div[class$="side-nav-card__live-status"]').innerHTML = `${parent1.querySelector('div[class*="side-nav-card__live-status"]').innerHTML}`
             // category
-            category = parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]')
+            category = parent0.querySelector('div[class$="side-nav-card__metadata"]')
             if (category){
-                category.innerHTML = `${parent1.querySelector('div[class="Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata"]').innerHTML}`
+                category.innerHTML = `${parent1.querySelector('div[class$="side-nav-card__metadata"]').innerHTML}`
             }
             else{
-                parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 eza-dez"]').append(parent1.querySelector("div[class='Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata']").cloneNode(true))
+                //?????parent0.querySelector('div[class="Layout-sc-1xcs6mc-0 eza-dez"]').append(parent1.querySelector("div[class='Layout-sc-1xcs6mc-0 bYeGkU side-nav-card__metadata']").cloneNode(true))
             }
             //change image online
-            if (parent1.previousSibling.querySelector("div[class$='side-nav-card__live-status']")){
-                parent0.previousSibling.className = "Layout-sc-1xcs6mc-0 bgXDR side-nav-card__avatar"
+            if (parent1.previousSibling.className.indexOf('side-nav-card__live-status--ofline')){
+                parent0.previousSibling.className = parent0.previousSibling.className.slice(0,-9)
             }
-            get_parent(parent1,4).style.display = 'none'
+            get_parent(parent1,3).style.display = 'none'
         }
         // if we have the one channel and it has red live point then switch channel to offline type from localStorage
         if(chnls.length == 1 && get_parent(chnls[0],4).querySelector('div[class$="tw-channel-status-indicator"]')){
-            get_parent(chnls[0],7).innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]').innerHTML}`
+            get_parent(chnls[0],8).innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]').innerHTML}`
         }        
     })
 }
@@ -148,17 +151,21 @@ function openCloseChannels(){
 //adds pin buttons at web page
 function setPins() {
     try{
-        channels_counter = document.querySelector('div[class="Layout-sc-1xcs6mc-0 dcyYPL side-nav-section"]').querySelectorAll('a[class~="ivecvv"]').length
+
+        channels_counter = document.querySelector("div[class$='side-nav__scrollable_content']").querySelectorAll("div[class$='tw-transition']").length + document.querySelector('div[class="my-container"]')?.querySelectorAll('button[class="pin"]').length
         pins_counter = document.querySelectorAll('button[class="pin"]').length
         if ( channels_counter != pins_counter) {
-            document.querySelector('div[class="Layout-sc-1xcs6mc-0 dcyYPL side-nav-section"]').querySelectorAll('div[class^="Layout-sc-1xcs6mc-0 cwtKyw side-nav-card"]').forEach((element) => {
-                if (!element.querySelector('button[class="pin"]')){
-                    element.style = " display:inline-flex; width:100%"
-                    element.querySelector('a[class^="ScCoreLink-sc-16kq0mq-0 iCWdoq InjectLayout-sc-1i43xsx-0"]').style.cssText = "width: 90% !important;float: right;"
+            console.log(channels_counter)
+            console.log(pins_counter)
+            document.querySelector("div[class$='side-nav__scrollable_content']").querySelectorAll("div[class^='Layout-sc-1xcs6mc-0']").forEach(elem =>{
+                if (elem.classList.contains("side-nav-card") && !elem.querySelector('button[class="pin"]')){
+                    elem.style = "display:inline-flex; width:100%"
+                    elem.querySelector('a').style.cssText = "width: 90% !important;float: right;"
                     btn = createPin()
-                    element.prepend(btn)
+                    elem.prepend(btn)
                 }
-            })   
+                
+            }) 
         }
         if (flag){
             setPinnedChannels()
