@@ -1,5 +1,5 @@
 let count = 0
-const DELAY = 300
+const DELAY = 2000
 let flag = true
 let updater = 10
 let container = document.createElement('div')
@@ -24,6 +24,9 @@ function get_parent(obj,count){
 function setPinnedChannels(){
     let lst = JSON.parse(localStorage.getItem('PinnedList'))
     let listchannels = document.querySelector('div[class^="InjectLayout-sc-1i43xsx-0"][class*="tw-transition-group"]')
+    if (listchannels.parentElement.role != "group"){
+        return -1
+    }
     listchannels.prepend(container)
     listchannels = listchannels.firstChild
     lst.forEach(elem => {
@@ -34,7 +37,7 @@ function setPinnedChannels(){
             
             channel = get_parent(document.querySelector(`p[title="${elem.name}"]`),7)
             var tmp =channel.cloneNode(true)
-            channel.parentElement.style.display = "none";
+            channel.style.display = "none";
             tmp.querySelector('img').src = "https://i.imgur.com/K0TX8gA.png"     
             tmp.querySelector('button').setAttribute('condition','true')
         }
@@ -43,6 +46,7 @@ function setPinnedChannels(){
         }
         listchannels.prepend(tmp)
     })
+    return 1
 }
 // add pinned channel into storage
 function addToStorage(element){
@@ -139,7 +143,7 @@ function update_channels_info(){
         }
         // if we have the one channel and it has red live point then switch channel to offline type from localStorage
         if(chnls.length == 1 && get_parent(chnls[0],4).querySelector('div[class$="tw-channel-status-indicator"]')){
-            get_parent(chnls[0],8).innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div[class="ScTransitionBase-sc-hx4quq-0 hGaUsM tw-transition"]').innerHTML}`
+            get_parent(chnls[0],8).innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div"]').innerHTML}`
         }        
     })
 }
@@ -168,8 +172,10 @@ function setPins() {
             }) 
         }
         if (flag){
-            setPinnedChannels()
-            flag = false
+            if (setPinnedChannels()){
+                flag = false
+            }
+            
         }  
     }
     catch (e){}
