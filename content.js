@@ -143,7 +143,7 @@ function update_channels_info(){
         }
         // if we have the one channel and it has red live point then switch channel to offline type from localStorage
         if(chnls.length == 1 && get_parent(chnls[0],4).querySelector('div[class$="tw-channel-status-indicator"]')){
-            get_parent(chnls[0],8).innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div"]').innerHTML}`
+            get_parent(chnls[0],7).innerHTML = `${new DOMParser().parseFromString(elem.block, "text/html").querySelector('div').innerHTML}`
         }        
     })
 }
